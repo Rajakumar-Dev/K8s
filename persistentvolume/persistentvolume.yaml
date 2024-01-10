@@ -1,0 +1,18 @@
+# this is for docker desktop
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+    - ReadWriteMany
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath:
+    path: /run/desktop/mnt/host/c/tekton-mount-path/task/
+    type: DirectoryOrCreate
