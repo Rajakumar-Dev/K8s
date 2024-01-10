@@ -1,16 +1,14 @@
-apiVresion: v1
-kind: pod 
-
+apiVersion: v1
+kind: Pod
 metadata:
   name: nginx-pod
-  namespace: playground
   labels:
     team: devOps
-    app: devOps-app
+    app: todo
 spec:
   containers:
     - name: nginx-container
-      image: nginx
+      image: nginx:latest
       ports:
         - containerPort: 80
       
