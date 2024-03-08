@@ -1,3 +1,32 @@
+---
+# container volume   # ephemeral volume
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: sandbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - image: mongo
+          name: mongo
+          args: ["--dbpath", "/data/db"]
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "admin"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "password"
+
+---
+#emptydir  # ephemeral volume
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,5 +56,48 @@ spec:
               name: mongo-volume
       volumes:
         - name: mongo-volume
-          persistentVolumeClaim:
-            claimName: mongo-pvc
+          emptyDir: {}
+
+---
+#hostpath  # ephemeral volume
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - image: mongo
+          name: mongo
+          args: ["--dbpath", "/data/db"]
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "admin"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "password"
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-volume
+      volumes:
+        - name: mongo-volume
+          hostPath:
+            path: /data
+---            
+
+## Persistent Volumes
+
+#PV
+#PVC
+#Storageclass
+
+
+
+
